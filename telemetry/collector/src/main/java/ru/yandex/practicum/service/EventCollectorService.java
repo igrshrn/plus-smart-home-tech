@@ -23,7 +23,7 @@ public class EventCollectorService {
     public void collectSensorEvent(SensorEvent event) {
         SensorEventAvro avro = avroConverter.toSensorAvro(event);
         String topic = topicConfig.getSensors();
-        byte[] payload = avroSerializer.serialize(topic, avro);
+        byte[] payload = avroSerializer.serialize(avro);
 
         log.info("Отправка события датчика в Kafka: topic={}, key={}, тип={}",
                 topic, event.getId(), event.getType());
@@ -34,7 +34,7 @@ public class EventCollectorService {
     public void collectHubEvent(HubEvent event) {
         HubEventAvro avro = avroConverter.toHubAvro(event);
         String topic = topicConfig.getHubs();
-        byte[] payload = avroSerializer.serialize(topic, avro);
+        byte[] payload = avroSerializer.serialize(avro);
 
         log.info("Отправка события хаба в Kafka: topic={}, key={}, тип={}",
                 topic, event.getHubId(), event.getType());

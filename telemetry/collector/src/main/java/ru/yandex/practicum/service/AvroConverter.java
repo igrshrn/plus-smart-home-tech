@@ -21,18 +21,14 @@ public class AvroConverter {
     }
 
     private Object createSensorPayload(SensorEvent event) {
-        if (event instanceof LightSensorEvent e) {
-            return createLightSensorPayload(e);
-        } else if (event instanceof MotionSensorEvent e) {
-            return createMotionSensorPayload(e);
-        } else if (event instanceof SwitchSensorEvent e) {
-            return createSwitchSensorPayload(e);
-        } else if (event instanceof ClimateSensorEvent e) {
-            return createClimateSensorPayload(e);
-        } else if (event instanceof TemperatureSensorEvent e) {
-            return createTemperatureSensorPayload(e);
-        }
-        throw new IllegalArgumentException("Unknown sensor event type: " + event.getClass());
+        return switch (event.getType()) {
+            case LIGHT_SENSOR_EVENT -> createLightSensorPayload((LightSensorEvent) event);
+            case MOTION_SENSOR_EVENT -> createMotionSensorPayload((MotionSensorEvent) event);
+            case TEMPERATURE_SENSOR_EVENT -> createTemperatureSensorPayload((TemperatureSensorEvent) event);
+            case CLIMATE_SENSOR_EVENT -> createClimateSensorPayload((ClimateSensorEvent) event);
+            case SWITCH_SENSOR_EVENT -> createSwitchSensorPayload((SwitchSensorEvent) event);
+            default -> throw new IllegalArgumentException("Unknown sensor event type: " + event.getClass());
+        };
     }
 
     private LightSensorAvro createLightSensorPayload(LightSensorEvent e) {
@@ -84,16 +80,13 @@ public class AvroConverter {
     }
 
     private Object createHubPayload(HubEvent event) {
-        if (event instanceof DeviceAddedEvent e) {
-            return createDeviceAddedPayload(e);
-        } else if (event instanceof DeviceRemovedEvent e) {
-            return createDeviceRemovedPayload(e);
-        } else if (event instanceof ScenarioAddedEvent e) {
-            return createScenarioAddedPayload(e);
-        } else if (event instanceof ScenarioRemovedEvent e) {
-            return createScenarioRemovedPayload(e);
-        }
-        throw new IllegalArgumentException("Unknown hub event type: " + event.getClass());
+        return switch (event.getType()) {
+            case DEVICE_ADDED -> createDeviceAddedPayload((DeviceAddedEvent) event);
+            case DEVICE_REMOVED -> createDeviceRemovedPayload((DeviceRemovedEvent) event);
+            case SCENARIO_ADDED -> createScenarioAddedPayload((ScenarioAddedEvent) event);
+            case SCENARIO_REMOVED -> createScenarioRemovedPayload((ScenarioRemovedEvent) event);
+            default -> throw new IllegalArgumentException("Unknown hub event type: " + event.getClass());
+        };
     }
 
     private DeviceAddedEventAvro createDeviceAddedPayload(DeviceAddedEvent e) {

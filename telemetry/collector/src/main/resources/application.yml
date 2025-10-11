@@ -14,3 +14,7 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       properties:
         schema.registry.url: http://localhost:8081
+
+grpc:
+  server:
+    port: 59091

@@ -5,6 +5,7 @@ import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.model.hub.*;
 import ru.yandex.practicum.model.sensor.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -14,7 +15,7 @@ public class AvroConverter {
         SensorEventAvro.Builder builder = SensorEventAvro.newBuilder()
                 .setId(event.getId())
                 .setHubId(event.getHubId())
-                .setTimestamp(event.getTimestamp().toEpochMilli());
+                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().toEpochMilli()));
 
         builder.setPayload(createSensorPayload(event));
         return builder.build();
@@ -64,7 +65,7 @@ public class AvroConverter {
         return TemperatureSensorAvro.newBuilder()
                 .setId(e.getId())
                 .setHubId(e.getHubId())
-                .setTimestamp(e.getTimestamp().toEpochMilli())
+                .setTimestamp(Instant.ofEpochSecond(e.getTimestamp().toEpochMilli()))
                 .setTemperatureC(e.getTemperatureC())
                 .setTemperatureF(e.getTemperatureF())
                 .build();

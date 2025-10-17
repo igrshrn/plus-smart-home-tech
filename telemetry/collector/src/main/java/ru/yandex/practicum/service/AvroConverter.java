@@ -5,7 +5,6 @@ import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.model.hub.*;
 import ru.yandex.practicum.model.sensor.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -15,7 +14,7 @@ public class AvroConverter {
         SensorEventAvro.Builder builder = SensorEventAvro.newBuilder()
                 .setId(event.getId())
                 .setHubId(event.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().toEpochMilli()));
+                .setTimestamp(event.getTimestamp());
 
         builder.setPayload(createSensorPayload(event));
         return builder.build();
@@ -65,7 +64,7 @@ public class AvroConverter {
         return TemperatureSensorAvro.newBuilder()
                 .setId(e.getId())
                 .setHubId(e.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(e.getTimestamp().toEpochMilli()))
+                .setTimestamp(e.getTimestamp())
                 .setTemperatureC(e.getTemperatureC())
                 .setTemperatureF(e.getTemperatureF())
                 .build();
@@ -120,11 +119,24 @@ public class AvroConverter {
     }
 
     private ScenarioConditionAvro createScenarioConditionAvro(ScenarioCondition c) {
+        Object value = c.getValue();
+
+        Object avroValue;
+        if (value instanceof Boolean bool) {
+            avroValue = bool;
+        } else if (value instanceof Integer integer) {
+            avroValue = integer;
+        } else if (value == null) {
+            avroValue = null;
+        } else {
+            throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
+        }
+
         return ScenarioConditionAvro.newBuilder()
                 .setSensorId(c.getSensorId())
                 .setType(ConditionTypeAvro.valueOf(c.getType().name()))
                 .setOperation(ConditionOperationAvro.valueOf(c.getOperation().name()))
-                .setValue(c.getValue() != null ? c.getValue() : null)
+                .setValue(avroValue)
                 .build();
     }
 
@@ -132,7 +144,7 @@ public class AvroConverter {
         return DeviceActionAvro.newBuilder()
                 .setSensorId(a.getSensorId())
                 .setType(ActionTypeAvro.valueOf(a.getType().name()))
-                .setValue(a.getValue() != null ? a.getValue() : null)
+                .setValue((a.getValue() != null) ? a.getValue() : null)
                 .build();
     }
 

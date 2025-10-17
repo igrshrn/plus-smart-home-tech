@@ -17,6 +17,7 @@
         <module>collector</module>
         <module>aggregator</module>
         <module>analyzer</module>
+        <module>domain-models</module>
     </modules>
 
 </project>

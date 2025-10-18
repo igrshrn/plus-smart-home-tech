@@ -1,5 +1,7 @@
 package ru.practicum.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.model.Action;
 import ru.practicum.model.Condition;
 import ru.practicum.model.Scenario;
@@ -9,6 +11,7 @@ import ru.yandex.practicum.model.hub.enums.ActionType;
 import ru.yandex.practicum.model.hub.enums.ConditionOperation;
 import ru.yandex.practicum.model.hub.enums.ConditionType;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Mapper {
 
     public static Sensor mapToSensor(HubEventAvro hubEventAvro, DeviceAddedEventAvro deviceAddedEventAvro) {

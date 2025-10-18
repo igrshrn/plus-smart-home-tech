@@ -32,7 +32,7 @@ public class EventCollectorService {
         kafkaEventProducer.sendHubEvent(avro, event.getHubId(), event.getTimestamp());
         String topic = topicConfig.getHubs();
 
-        log.info("Отправка события хаба в Kafka: topic={}, key={}, тип={}",
-                topic, event.getHubId(), event.getType());
+        log.info("Отправка события хаба в Kafka: topic={}, key={}, тип={}, ивент={}",
+                topic, event.getHubId(), event.getType(), event);
     }
 }

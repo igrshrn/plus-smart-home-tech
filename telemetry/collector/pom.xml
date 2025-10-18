@@ -11,6 +11,11 @@
 
     <artifactId>collector</artifactId>
 
+    <properties>
+        <java.version>21</java.version>
+        <lombok.version>1.18.38</lombok.version>
+    </properties>
+
     <repositories>
         <repository>
             <id>confluent</id>
@@ -23,6 +28,18 @@
             <groupId>ru.yandex.practicum</groupId>
             <artifactId>avro-schemas</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.practicum</groupId>
+            <artifactId>proto-schemas</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-server-spring-boot-starter</artifactId>
+            <version>3.1.0.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -39,7 +56,14 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-            <version>1.18.38</version>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.practicum</groupId>
+            <artifactId>domain-models</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

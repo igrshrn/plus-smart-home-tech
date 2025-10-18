@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 app:
   kafka:
     topics:
@@ -7,10 +10,12 @@ app:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    admin:
-      bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       properties:
         schema.registry.url: http://localhost:8081
+
+grpc:
+  server:
+    port: 59091

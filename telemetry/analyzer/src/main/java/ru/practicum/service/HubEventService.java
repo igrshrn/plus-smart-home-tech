@@ -24,10 +24,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class HubEventService {
+    private final Map<String, HubEventHandler> hubEventHandlers;
     @GrpcClient("router")
     HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterClient;
-
-    private final Map<String, HubEventHandler> hubEventHandlers;
 
     public HubEventService(Set<HubEventHandler> hubEventHandlers) {
         this.hubEventHandlers = hubEventHandlers.stream()

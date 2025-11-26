@@ -111,34 +111,50 @@ public class DeliveryService {
 
     public BigDecimal calculateCost(OrderDto orderDto) {
         Delivery delivery = findDeliveryByOrderId(orderDto.getOrderId());
-
         log.info("Рассчет стоимости для доставки: {}", delivery);
 
         // Базовая стоимость
         BigDecimal cost = BigDecimal.valueOf(BASE_DELIVERY_PRICE);
+        log.debug("Начальная базовая стоимость: {}", cost);
 
         // Коэффициент от адреса отправителя
         BigDecimal fromAddressCoef = getCoefFromAddress(delivery.getFromAddress());
-        cost = cost.add(BigDecimal.valueOf(BASE_DELIVERY_PRICE).multiply(fromAddressCoef));
+        BigDecimal fromAddressCost = BigDecimal.valueOf(BASE_DELIVERY_PRICE).multiply(fromAddressCoef);
+        cost = cost.add(fromAddressCost);
+        log.debug("Коэффициент от адреса отправителя ({}): {}. Добавленная стоимость: {}",
+                delivery.getFromAddress(), fromAddressCoef, fromAddressCost);
 
         // Стоимость за хрупкость
         BigDecimal fragileCoef = getFragileCoefficient(orderDto.isFragile());
         cost = cost.multiply(fragileCoef);
+        log.debug("Коэффициент хрупкости ({}): {}. Итоговая стоимость после применения: {}",
+                orderDto.isFragile(), fragileCoef, cost);
 
         // Стоимость за вес
         BigDecimal weightCost = BigDecimal.valueOf(orderDto.getDeliveryWeight())
                 .multiply(BigDecimal.valueOf(WEIGHT_RATE));
         cost = cost.add(weightCost);
+        log.debug("Стоимость за вес ({} * {}): {}. Итоговая стоимость: {}",
+                orderDto.getDeliveryWeight(), WEIGHT_RATE, weightCost, cost);
 
         // Стоимость за объем
         BigDecimal volumeCost = BigDecimal.valueOf(orderDto.getDeliveryVolume())
                 .multiply(BigDecimal.valueOf(VOLUME_RATE));
         cost = cost.add(volumeCost);
+        log.debug("Стоимость за объем ({} * {}): {}. Итоговая стоимость: {}",
+                orderDto.getDeliveryVolume(), VOLUME_RATE, volumeCost, cost);
 
+        // Коэффициент расстояния (улицы складов)
         BigDecimal distanceCoef = getCoefByToAddress(delivery.getFromAddress(), delivery.getToAddress());
         cost = cost.multiply(distanceCoef);
+        log.debug("Коэффициент расстояния ({} -> {}): {}. Итоговая стоимость: {}",
+                delivery.getFromAddress().getStreet(), delivery.getToAddress().getStreet(), distanceCoef, cost);
 
-        return cost.setScale(2, RoundingMode.HALF_UP);
+        // Окончательный результат
+        BigDecimal finalCost = cost.setScale(2, RoundingMode.HALF_UP);
+        log.info("Окончательная стоимость доставки для заказа {}: {}", orderDto.getOrderId(), finalCost);
+
+        return finalCost;
     }
 
     private BigDecimal getCoefFromAddress(Address address) {

@@ -1,7 +1,6 @@
 package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.client.OrderClient;
 import ru.yandex.practicum.dto.order.CreateNewOrderRequest;
@@ -12,7 +11,6 @@ import ru.yandex.practicum.service.OrderOrchestratorService;
 import java.util.List;
 import java.util.UUID;
 
-@Validated
 @RestController
 @RequestMapping("/api/v1/order")
 @RequiredArgsConstructor

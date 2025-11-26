@@ -13,7 +13,7 @@ import ru.yandex.practicum.dto.warehouse.AddressDto;
 @AllArgsConstructor
 public class CreateNewOrderRequest {
     @NotBlank
-    String userName;
+    private String userName;
 
     @NotNull
     private ShoppingCartDto shoppingCart;

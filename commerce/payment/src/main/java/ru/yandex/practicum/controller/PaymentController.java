@@ -1,7 +1,6 @@
 package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import ru.yandex.practicum.service.PaymentService;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Validated
 @RestController
 @RequestMapping("/api/v1/payment")
 @RequiredArgsConstructor

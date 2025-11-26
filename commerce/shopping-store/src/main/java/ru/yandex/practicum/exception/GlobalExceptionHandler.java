@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
         log.warn("Resource not found: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.of(
-                        HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.NOT_FOUND,
                         "Not Found",
                         e.getMessage()
                 ));

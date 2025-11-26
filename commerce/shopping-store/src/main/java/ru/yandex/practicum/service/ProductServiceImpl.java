@@ -14,6 +14,7 @@ import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.model.SetProductQuantityStateRequest;
 import ru.yandex.practicum.repository.ProductRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -80,5 +81,16 @@ public class ProductServiceImpl implements ProductService {
     public void updateProductQuantityState(SetProductQuantityStateRequest request) {
         Product product = getById(request.getProductId());
         product.setQuantityState(request.getQuantityState());
+    }
+
+    @Override
+    public List<ProductDto> getProductsByIds(List<UUID> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return List.of();
+        }
+        List<Product> products = repository.findAllByIdIn(productIds);
+        return products.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

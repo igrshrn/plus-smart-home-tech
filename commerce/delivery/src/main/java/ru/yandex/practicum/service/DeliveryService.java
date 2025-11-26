@@ -110,49 +110,54 @@ public class DeliveryService {
     }
 
     public BigDecimal calculateCost(OrderDto orderDto) {
-        Delivery delivery = findDeliveryByOrderId(orderDto.getOrderId());
-        log.info("Рассчет стоимости для доставки: {}", delivery);
+        UUID orderId = orderDto.getOrderId();
+        Delivery delivery = findDeliveryByOrderId(orderId);
+        log.info("Рассчет стоимости доставки для заказа ID: {}", orderId);
 
         // Базовая стоимость
         BigDecimal cost = BigDecimal.valueOf(BASE_DELIVERY_PRICE);
-        log.debug("Начальная базовая стоимость: {}", cost);
+        log.debug("Заказ {}: начальная базовая стоимость доставки = {}", orderId, cost);
 
         // Коэффициент от адреса отправителя
         BigDecimal fromAddressCoef = getCoefFromAddress(delivery.getFromAddress());
         BigDecimal fromAddressCost = BigDecimal.valueOf(BASE_DELIVERY_PRICE).multiply(fromAddressCoef);
         cost = cost.add(fromAddressCost);
-        log.debug("Коэффициент от адреса отправителя ({}): {}. Добавленная стоимость: {}",
-                delivery.getFromAddress(), fromAddressCoef, fromAddressCost);
+        log.debug("Заказ {}: коэффициент от адреса отправителя ({}): {}. Добавленная стоимость: {}",
+                orderId, delivery.getFromAddress(), fromAddressCoef, fromAddressCost);
 
         // Стоимость за хрупкость
         BigDecimal fragileCoef = getFragileCoefficient(orderDto.isFragile());
         cost = cost.multiply(fragileCoef);
-        log.debug("Коэффициент хрупкости ({}): {}. Итоговая стоимость после применения: {}",
-                orderDto.isFragile(), fragileCoef, cost);
+        log.debug("Заказ {}: применён коэффициент хрупкости ({}). Новая стоимость: {}",
+                orderId, orderDto.isFragile(), cost);
 
         // Стоимость за вес
         BigDecimal weightCost = BigDecimal.valueOf(orderDto.getDeliveryWeight())
                 .multiply(BigDecimal.valueOf(WEIGHT_RATE));
         cost = cost.add(weightCost);
-        log.debug("Стоимость за вес ({} * {}): {}. Итоговая стоимость: {}",
-                orderDto.getDeliveryWeight(), WEIGHT_RATE, weightCost, cost);
+        log.debug("Заказ {}: стоимость за вес ({} * {} = {}) добавлена. Текущая стоимость: {}",
+                orderId, orderDto.getDeliveryWeight(), WEIGHT_RATE, weightCost, cost);
 
         // Стоимость за объем
         BigDecimal volumeCost = BigDecimal.valueOf(orderDto.getDeliveryVolume())
                 .multiply(BigDecimal.valueOf(VOLUME_RATE));
         cost = cost.add(volumeCost);
-        log.debug("Стоимость за объем ({} * {}): {}. Итоговая стоимость: {}",
-                orderDto.getDeliveryVolume(), VOLUME_RATE, volumeCost, cost);
+        log.debug("Заказ {}: стоимость за объем ({} * {} = {}) добавлена. Текущая стоимость: {}",
+                orderId, orderDto.getDeliveryVolume(), VOLUME_RATE, volumeCost, cost);
 
         // Коэффициент расстояния (улицы складов)
         BigDecimal distanceCoef = getCoefByToAddress(delivery.getFromAddress(), delivery.getToAddress());
         cost = cost.multiply(distanceCoef);
-        log.debug("Коэффициент расстояния ({} -> {}): {}. Итоговая стоимость: {}",
-                delivery.getFromAddress().getStreet(), delivery.getToAddress().getStreet(), distanceCoef, cost);
+        log.debug("Заказ {}: коэффициент расстояния ({} -> {}) = {}. Итоговая стоимость: {}",
+                orderId,
+                delivery.getFromAddress().getStreet(),
+                delivery.getToAddress().getStreet(),
+                distanceCoef,
+                cost);
 
         // Окончательный результат
         BigDecimal finalCost = cost.setScale(2, RoundingMode.HALF_UP);
-        log.info("Окончательная стоимость доставки для заказа {}: {}", orderDto.getOrderId(), finalCost);
+        log.info("Заказ {}: окончательная стоимость доставки рассчитана = {}", orderId, finalCost);
 
         return finalCost;
     }

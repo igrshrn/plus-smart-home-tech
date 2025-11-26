@@ -13,6 +13,8 @@ import ru.yandex.practicum.dto.shoping_store.enums.QuantityState;
 import ru.yandex.practicum.model.SetProductQuantityStateRequest;
 import ru.yandex.practicum.service.ProductService;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -59,5 +61,10 @@ public class ProductController implements ShoppingStoreClient {
     public ProductDto getProduct(@PathVariable UUID productId) {
         log.info("GET /api/v1/shopping-store/{}", productId);
         return service.getProductById(productId);
+    }
+
+    @Override
+    public List<ProductDto> getProductByIds(Collection<UUID> ids) {
+        return List.of();
     }
 }

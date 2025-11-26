@@ -1,15 +1,21 @@
 package ru.yandex.practicum.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.client.WarehouseClient;
+import ru.yandex.practicum.dto.delivery.ShippedToDeliveryRequest;
+import ru.yandex.practicum.dto.order.ProductReturnRequest;
 import ru.yandex.practicum.dto.shoping_cart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
 import ru.yandex.practicum.service.WarehouseService;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -63,5 +69,24 @@ public class WarehouseController implements WarehouseClient {
         log.info("Warehouse address resolved: country={}, city={}, street={}, house={}, flat={}",
                 address.getCountry(), address.getCity(), address.getStreet(), address.getHouse(), address.getFlat());
         return address;
+    }
+
+    @Override
+    @PostMapping("/shipped")
+    public void shippedToDelivery(@RequestBody @Valid ShippedToDeliveryRequest request) {
+        service.shippedToDelivery(request);
+    }
+
+    @Override
+    @PostMapping("/return")
+    public void acceptReturn(Map<UUID, Long> products) {
+        service.acceptReturn(products);
+    }
+
+
+    @Override
+    @PostMapping("/assembly")
+    public BookedProductsDto assemblyProductsForOrder(ProductReturnRequest request) {
+        return service.assembleProductsForOrder(request);
     }
 }

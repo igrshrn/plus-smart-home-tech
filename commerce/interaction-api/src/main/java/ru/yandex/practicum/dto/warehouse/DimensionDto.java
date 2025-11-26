@@ -1,5 +1,7 @@
 package ru.yandex.practicum.dto.warehouse;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -8,7 +10,15 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class DimensionDto {
-    private double width;
-    private double height;
-    private double depth;
+    @NotNull
+    @Min(value = 1)
+    private Double width;
+
+    @NotNull
+    @Min(value = 1)
+    private Double height;
+
+    @NotNull
+    @Min(value = 1)
+    private Double depth;
 }

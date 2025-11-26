@@ -7,6 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public interface WarehouseProductRepository extends JpaRepository<WarehouseProduct, UUID> {
+public interface WarehouseRepository extends JpaRepository<WarehouseProduct, UUID> {
     List<WarehouseProduct> findByProductIdIn(Collection<UUID> productIds);
 }

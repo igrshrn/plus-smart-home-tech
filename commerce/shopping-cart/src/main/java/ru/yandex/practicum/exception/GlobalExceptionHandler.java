@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
         log.warn("Cart deactivated: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.of(
-                        HttpStatus.CONFLICT.value(),
+                        HttpStatus.CONFLICT,
                         "Cart Deactivated",
                         e.getMessage()
                 ));
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         log.warn("Product not in cart: {}", e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.of(
-                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST,
                         "Product Not In Cart",
                         e.getMessage()
                 ));
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         log.warn("Illegal argument: {}", e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.of(
-                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST,
                         "Invalid Argument",
                         e.getMessage()
                 ));
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
         log.warn("Illegal state: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.of(
-                        HttpStatus.CONFLICT.value(),
+                        HttpStatus.CONFLICT,
                         "Illegal State",
                         e.getMessage()
                 ));

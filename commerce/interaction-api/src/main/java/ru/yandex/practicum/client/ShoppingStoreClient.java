@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.shoping_store.ProductDto;
 import ru.yandex.practicum.dto.shoping_store.enums.ProductCategory;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
@@ -30,4 +32,7 @@ public interface ShoppingStoreClient {
 
     @GetMapping("/{productId}")
     ProductDto getProduct(@PathVariable UUID productId);
+
+    @PostMapping("/onlyIds")
+    List<ProductDto> getProductByIds(@RequestBody Collection<UUID> ids);
 }

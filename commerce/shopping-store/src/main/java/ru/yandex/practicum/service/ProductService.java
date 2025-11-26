@@ -7,6 +7,7 @@ import ru.yandex.practicum.dto.shoping_store.enums.ProductCategory;
 import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.model.SetProductQuantityStateRequest;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
@@ -24,4 +25,6 @@ public interface ProductService {
     boolean removeProductFromStore(UUID productId);
 
     void updateProductQuantityState(SetProductQuantityStateRequest request);
+
+    List<ProductDto> getProductsByIds(List<UUID> productIds);
 }

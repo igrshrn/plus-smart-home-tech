@@ -2,6 +2,7 @@ package ru.yandex.practicum.exception.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,7 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public static ErrorResponse of(int status, String error, String message) {
-        return new ErrorResponse(status, error, message);
+    public static ErrorResponse of(HttpStatus status, String error, String message) {
+        return new ErrorResponse(status.value(), error, message);
     }
 }
